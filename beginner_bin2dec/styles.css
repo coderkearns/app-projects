@@ -1,0 +1,54 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+header {
+    background-color: #f1f1f1;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #d0d0d0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.project-tier {
+    font-size: 1rem;
+    font-style: italic;
+}
+
+main {
+    width: 70%;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.project {
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+}
+
+#input {
+    width: 100%;
+    height: 5rem;
+}
+
+#output {
+    width: 100%;
+    height: 5rem;
+    border: 1px solid #767676;
+    border-radius: 0.2rem;
+    padding: 0.1rem;
+}
