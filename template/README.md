@@ -6,4 +6,4 @@
 
 ## Todos
 
-[ ] Write up the steps here.
+- [ ] Write up the steps here.
