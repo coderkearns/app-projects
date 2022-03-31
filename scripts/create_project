@@ -1,0 +1,124 @@
+#!/usr/bin/env python
+import os
+import re
+import readline
+
+
+def get_tier():
+    """
+    Prompt the user for the tier of the project. (beginner, intermediate, advanced)
+    Keep asking until the user gives one of those answers or the corresponding number.
+    """
+    tiers = {
+        "1": "beginner",
+        "2": "intermediate",
+        "3": "advanced",
+    }
+    while True:
+        tier = input("(1) Beginner, (2) Intermediate, or (3) Advanced? ").lower()
+        if tier in tiers:
+            return tiers[tier]
+        if tier in tiers.values():
+            return tier
+        print("Please enter 1, 2, or 3.")
+
+
+def get_multiline_input(prompt):
+    """
+    Gets input over multiple lines. It will keep grabbing lines until EOF is
+    reached.
+    """
+    print(prompt)
+    lines = []
+    while True:
+        try:
+            line = input()
+        except EOFError:
+            break
+        if line == "":
+            print()
+        lines.append(line)
+    return "\n".join(lines)
+
+
+def undo_name_format(string):
+    """
+    Undoes any name formatting, like camel case, pascal case, snake case, etc.
+    Returns the string completely lowercase, seperated by spaces.
+
+    >>> undo_name_format('wow cool')
+    'wow cool'
+    >>> undo_name_format('wow-cool')
+    'wow cool'
+    >>> undo_name_format('wow_cool')
+    'wow cool'
+    >>> undo_name_format('Wow-Cool')
+    'wow cool'
+    >>> undo_name_format('wowCool')
+    'wow cool'
+    >>> undo_name_format('WowCool')
+    'wow cool'
+    >>> undo_name_format('WOW_COOL')
+    'wow cool'
+    """
+    string = string.replace("-", " ").replace("_", " ")
+    string = re.sub(r"([a-z])([A-Z])", r"\1 \2", string)
+    string = string.lower()
+    return string
+
+
+def make_snake_case(string):
+    """
+    Makes a string seperated by spaces snake case.
+
+    >>> make_snake_case("wow cool")
+    "wow_cool"
+    """
+    return string.replace(" ", "_")
+
+
+def render(template, context={}):
+    """
+    Given a template string and a context dict, render each item in the context
+    dict as a string and return the result.
+
+    >>> render('Hello, {name}', {'name': 'world'})
+    'Hello, world'
+    >>> render ("a={a}, and b={b}", {'a': 1, 'b': 2})
+    'a=1, and b=2'
+    """
+
+    for k, v in context.items():
+        template = template.replace("{" + k + "}", v)
+    return template
+
+
+def copy_template_files(template_folder, dest_folder, context={}):
+    """
+    Copies all files in template_folder to dest_folder.
+    """
+    if not os.path.exists(dest_folder):
+        os.makedirs(dest_folder)
+
+    for filename in os.listdir(template_folder):
+        with open(os.path.join(dest_folder, filename), "w+") as target_f:
+            with open(os.path.join(template_folder, filename), "r") as template_f:
+                target_f.write(render(template_f.read(), context))
+
+
+project_name = undo_name_format(input("What is the name of your project? "))
+project_tier = get_tier()
+project_file_name = f"{project_tier}_{make_snake_case(project_name)}"
+project_description = get_multiline_input("What is the description of your project? ")
+
+print(f"Creating project {project_file_name}...", end="\r")
+
+context = {
+    "name": project_name.title(),
+    "tier": project_tier.title(),
+    "description": project_description,
+}
+
+copy_template_files("template", project_file_name, context)
+
+print(f"Created project {project_file_name}.")
