@@ -282,3 +282,7 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# The app-ideas/ folder is a git clone of https://github.com/florinpop17/app-ideas.
+# It will be ignored so app-ideas can be easily accesed without updating constantly.
+app-ideas/
